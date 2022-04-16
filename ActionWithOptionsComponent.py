@@ -67,8 +67,8 @@ class OptionsComponent(ControlSurfaceComponent):
     def __init__(self, num_options = 8, num_labels = 4, num_display_segments = None, *a, **k):
         super(OptionsComponent, self).__init__(*a, **k)
         num_display_segments = num_display_segments or num_options
-        self._label_data_sources = [ DisplayDataSource() for _ in xrange(num_labels) ]
-        self._data_sources = [ DisplayDataSource() for _ in xrange(num_display_segments) ]
+        self._label_data_sources = [ DisplayDataSource() for _ in range(num_labels) ]
+        self._data_sources = [ DisplayDataSource() for _ in range(num_display_segments) ]
         self._option_names = []
 
     def _get_option_names(self):
@@ -103,17 +103,17 @@ class OptionsComponent(ControlSurfaceComponent):
         if line:
             self._update_data_sources()
             line.set_num_segments(len(self._data_sources))
-            for segment in xrange(len(self._data_sources)):
+            for segment in range(len(self._data_sources)):
                 line.segment(segment).set_data_source(self._data_sources[segment])
 
     def set_label_display_line(self, line):
         if line:
             line.set_num_segments(len(self._label_data_sources))
-            for segment in xrange(len(self._label_data_sources)):
+            for segment in range(len(self._label_data_sources)):
                 line.segment(segment).set_data_source(self._label_data_sources[segment])
 
     def _get_labels(self):
-        return map(lambda segment: segment.display_string(), self._label_data_sources)
+        return [segment.display_string() for segment in self._label_data_sources]
 
     def _set_labels(self, labels):
         for segment, label in map(None, self._label_data_sources, labels or []):

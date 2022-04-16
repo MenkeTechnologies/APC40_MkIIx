@@ -1,7 +1,7 @@
 from _Framework.ModesComponent import LatchingBehaviour
 
 class CustomReenterBehaviour(LatchingBehaviour):
-    u"""
+    """
     Like latching, but calls a callback when the mode is-reentered.
     """
 

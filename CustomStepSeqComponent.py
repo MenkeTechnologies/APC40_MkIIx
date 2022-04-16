@@ -1,7 +1,7 @@
 # Embedded file name: /Users/versonator/Jenkins/live/output/mac_64_static/Release/midi-remote-scripts/Push/StepSeqComponent.py
-from __future__ import with_statement
+
 import Live
-from itertools import imap, chain, starmap
+from itertools import chain, starmap
 from _Framework.ControlSurfaceComponent import ControlSurfaceComponent
 from _Framework.CompoundComponent import CompoundComponent
 from _Framework.SubjectSlot import subject_slot, Subject, subject_slot_group
@@ -88,7 +88,7 @@ def find_instrument_devices(track_or_chain):
     instrument = find_if(lambda d: d.type == Live.Device.DeviceType.instrument, track_or_chain.devices)
     if instrument and not instrument.can_have_drum_pads:
         if instrument.can_have_chains:
-            return chain([instrument], *imap(find_instrument_devices, instrument.chains))
+            return chain([instrument], *map(find_instrument_devices, instrument.chains))
     return []
 
 def find_instrument_device(track_or_chain):
@@ -112,7 +112,7 @@ def find_drum_group_device(track_or_chain):
         if instrument.can_have_drum_pads:
             return instrument
         elif instrument.can_have_chains:
-            return find_if(bool, imap(find_drum_group_device, instrument.chains))
+            return find_if(bool, map(find_drum_group_device, instrument.chains))
 
 
 # switched 10/17

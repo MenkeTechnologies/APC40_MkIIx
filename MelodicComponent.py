@@ -1,9 +1,9 @@
 #Embedded file name: /Users/versonator/Jenkins/live/output/mac_64_static/Release/midi-remote-scripts/Push/MelodicComponent.py
-from __future__ import with_statement
+
 from _Framework.Util import forward_property, find_if
 from _Framework.SubjectSlot import subject_slot
 from _Framework.ModesComponent import ModesComponent, LayerMode
-from MessageBoxComponent import Messenger
+from .MessageBoxComponent import Messenger
 #from .APCMessenger import APCMessenger
 
 
@@ -34,7 +34,7 @@ class MelodicComponent(ModesComponent, Messenger):
         
         self._instrument = self.register_component(InstrumentComponent())
 
-        self._note_editors = self.register_components(*[APCNoteEditorComponent(settings_mode=note_editor_settings, clip_creator=clip_creator, grid_resolution=self._grid_resolution, is_enabled=False) for _ in xrange(NUM_NOTE_EDITORS)])
+        self._note_editors = self.register_components(*[APCNoteEditorComponent(settings_mode=note_editor_settings, clip_creator=clip_creator, grid_resolution=self._grid_resolution, is_enabled=False) for _ in range(NUM_NOTE_EDITORS)])
         self._paginator = NoteEditorPaginator(self._note_editors)
         self._loop_selector = self.register_component(LoopSelectorComponent(clip_creator=clip_creator, paginator=self._paginator, is_enabled=False))
         self._playhead = None

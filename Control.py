@@ -1,8 +1,8 @@
 # Embedded file name: /Users/versonator/Jenkins/live/output/mac_64_static/Release/python-bundle/MIDI Remote Scripts/_Framework/Control.py
 # Compiled at: 2018-04-23 20:27:04
-from __future__ import absolute_import, print_function, unicode_literals
+
 from functools import partial
-from itertools import izip_longest
+from itertools import zip_longest
 from . import Task
 from .Defaults import MOMENTARY_DELAY
 from .SubjectSlot import SlotManager
@@ -22,7 +22,7 @@ class ControlManager(SlotManager):
         return True
 
     def update(self):
-        for control_state in self._control_states.values():
+        for control_state in list(self._control_states.values()):
             control_state.update()
 
 
@@ -552,7 +552,7 @@ class EncoderControl(Control):
 
 
 class PlayableControl(ButtonControl):
-    u"""
+    """
     Control that will make the elements MIDI go into Live, to make it playable.
     """
 
@@ -635,7 +635,7 @@ class ControlList(Control):
         def _set_unavailable_color(self, value):
             self._unavailable_color = value
             control_elements = self._control_elements or []
-            for control, element in izip_longest(self._controls, control_elements):
+            for control, element in zip_longest(self._controls, control_elements):
                 if not control and element:
                     self._send_unavailable_color(element)
 
@@ -643,7 +643,7 @@ class ControlList(Control):
 
         def _create_controls(self, count):
             self._disconnect_controls()
-            self._controls = [ self._make_control(i) for i in xrange(count) ]
+            self._controls = [ self._make_control(i) for i in range(count) ]
 
         def _disconnect_controls(self):
             for control in self._controls:
@@ -668,7 +668,7 @@ class ControlList(Control):
 
         def _update_controls(self):
             control_elements = self._control_elements or []
-            for control, element in izip_longest(self._controls, control_elements):
+            for control, element in zip_longest(self._controls, control_elements):
                 if control:
                     control._get_state(self._manager).set_control_element(element)
                 elif element:
@@ -770,7 +770,7 @@ class MatrixControl(ControlList):
                 dimensions = (
                  control_elements.height(), control_elements.width())
                 if not self._dynamic_create:
-                    control_elements = [ control_elements.get_button(col, row) for row, col in product(xrange(self.height), xrange(self.width))
+                    control_elements = [ control_elements.get_button(col, row) for row, col in product(range(self.height), range(self.width))
                                        ]
             else:
                 if is_matrix(control_elements):

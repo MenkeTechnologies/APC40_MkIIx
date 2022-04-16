@@ -2,7 +2,7 @@
 """
 Component that automatically arms the selected track.
 """
-from itertools import ifilter
+
 from _Framework.SubjectSlot import subject_slot, subject_slot_group
 from _Framework.CompoundComponent import CompoundComponent
 from _Framework.ModesComponent import LatchingBehaviour
@@ -137,11 +137,11 @@ class AutoArmComponent(CompoundComponent):
     def needs_restore_auto_arm(self):
         song = self.song()
         exclusive_arm = song.exclusive_arm
-        return self.is_enabled() and self.can_auto_arm_track(song.view.selected_track) and not song.view.selected_track.arm and any(ifilter(lambda track: (exclusive_arm or self.can_auto_arm_track(track)) and track.can_be_armed and track.arm, song.tracks))
+        return self.is_enabled() and self.can_auto_arm_track(song.view.selected_track) and not song.view.selected_track.arm and any(filter(lambda track: (exclusive_arm or self.can_auto_arm_track(track)) and track.can_be_armed and track.arm, song.tracks))
 
     @subject_slot('tracks')
     def _on_tracks_changed(self):
-        tracks = filter(lambda t: t.can_be_armed, self.song().tracks)
+        tracks = [t for t in self.song().tracks if t.can_be_armed]
         self._on_arm_changed.replace_subjects(tracks)
         #self._on_current_input_routing_changed.replace_subjects(tracks)
         self._on_input_routing_type_changed.replace_subjects(tracks)

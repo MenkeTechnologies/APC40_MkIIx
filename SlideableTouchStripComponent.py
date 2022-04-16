@@ -3,7 +3,7 @@
 Component that navigates a series of pages.
 """
 from math import ceil
-from itertools import imap
+
 from _Framework.ControlSurfaceComponent import ControlSurfaceComponent
 from _Framework.SubjectSlot import subject_slot
 from _Framework.Util import clamp
@@ -84,9 +84,9 @@ class SlideableTouchStripComponent(ControlSurfaceComponent):
             def led_contents(i):
                 pmin = float(i) / num_leds * model.position_count
                 pmax = pmin + float(model.position_count) / num_leds
-                return any(imap(model.contents, model.contents_range(pmin, pmax)))
+                return any(map(model.contents, model.contents_range(pmin, pmax)))
 
-            array = [ (TouchStripElement.STATE_HALF if led_contents(i) else TouchStripElement.STATE_OFF) for i in xrange(num_leds) ]
+            array = [ (TouchStripElement.STATE_HALF if led_contents(i) else TouchStripElement.STATE_OFF) for i in range(num_leds) ]
             self._touch_strip_array = array
 
     @subject_slot('value')

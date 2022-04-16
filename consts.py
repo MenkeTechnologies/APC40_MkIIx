@@ -280,7 +280,7 @@ _test_mode = __builtins__.get('TEST_MODE', False)
 if not _test_mode:
     try:
         _this_module = sys.modules[__name__]
-        _proto_list = filter(lambda a: a.startswith('PROTO_'), dir(_this_module))
+        _proto_list = [a for a in dir(_this_module) if a.startswith('PROTO_')]
         for attr in _proto_list:
             try:
                 _local_consts = __import__('local_consts', globals(), locals(), [attr], -1)

@@ -1,4 +1,4 @@
-from __future__ import absolute_import, print_function, unicode_literals
+
 from itertools import count
 import Live
 from _Framework.CompoundComponent import CompoundComponent
@@ -12,12 +12,12 @@ from .custom_special_session_component import CustomClipSlotCopyHandler
 
 
 class CustomSessionComponent(CompoundComponent):
-    u"""
+    """
     Class encompassing several scene to cover a defined section of
     Live's session.  It controls the session ring and the set of tracks
     controlled by a given mixer.
     """
-    __subject_events__ = (u'offset', )
+    __subject_events__ = ('offset', )
     _linked_session_instances = []
     _minimal_track_offset = -1
     _minimal_scene_offset = -1
@@ -73,7 +73,7 @@ class CustomSessionComponent(CompoundComponent):
         self._mixer = None
         self._track_slots = self.register_slot_manager()
         self._selected_scene = self.register_component(self._create_scene())
-        self._scenes = self.register_components(*[ self._create_scene() for _ in xrange(num_scenes) ])
+        self._scenes = self.register_components(*[ self._create_scene() for _ in range(num_scenes) ])
         if self._session_component_ends_initialisation:
             self._end_initialisation()
         if auto_name:
@@ -110,12 +110,12 @@ class CustomSessionComponent(CompoundComponent):
     def _enable_skinning(self):
         self.set_stop_clip_triggered_value('Session.StopClipTriggered')
         self.set_stop_clip_value('Session.StopClip')
-        for scene_index in xrange(self._num_scenes):
+        for scene_index in range(self._num_scenes):
             scene = self.scene(scene_index)
             scene.set_scene_value('Session.Scene')
             scene.set_no_scene_value('Session.NoScene')
             scene.set_triggered_value('Session.SceneTriggered')
-            for track_index in xrange(self._num_tracks):
+            for track_index in range(self._num_tracks):
                 clip_slot = scene.clip_slot(track_index)
                 clip_slot.set_triggered_to_play_value('Session.ClipTriggeredPlay')
                 clip_slot.set_triggered_to_record_value('Session.ClipTriggeredRecord')
@@ -127,14 +127,14 @@ class CustomSessionComponent(CompoundComponent):
     def _auto_name(self):
         self.name = 'Session_Control'
         self.selected_scene().name = 'Selected_Scene'
-        for track_index in xrange(self._num_tracks):
+        for track_index in range(self._num_tracks):
             clip_slot = self.selected_scene().clip_slot(track_index)
             clip_slot.name = 'Selected_Scene_Clip_Slot_%d' % track_index
 
-        for scene_index in xrange(self._num_scenes):
+        for scene_index in range(self._num_scenes):
             scene = self.scene(scene_index)
             scene.name = 'Scene_%d' % scene_index
-            for track_index in xrange(self._num_tracks):
+            for track_index in range(self._num_tracks):
                 clip_slot = scene.clip_slot(track_index)
                 clip_slot.name = '%d_Clip_Slot_%d' % (track_index, scene_index)
 
@@ -265,7 +265,7 @@ class CustomSessionComponent(CompoundComponent):
                 slot.set_launch_button(button)
 
         else:
-            for x, y in product(xrange(self._num_tracks), xrange(self._num_scenes)):
+            for x, y in product(range(self._num_tracks), range(self._num_scenes)):
                 scene = self.scene(y)
                 slot = scene.clip_slot(x)
                 slot.set_launch_button(None)
@@ -280,14 +280,14 @@ class CustomSessionComponent(CompoundComponent):
                 scene.set_launch_button(button)
 
         else:
-            for x in xrange(self._num_scenes):
+            for x in range(self._num_scenes):
                 scene = self.scene(x)
                 scene.set_launch_button(None)
 
         return
 
     def set_mixer(self, mixer):
-        u""" Sets the MixerComponent to be controlled by this session """
+        """ Sets the MixerComponent to be controlled by this session """
         self._mixer = mixer
         if self._mixer != None:
             self._mixer.set_track_offset(self.track_offset())
@@ -313,7 +313,7 @@ class CustomSessionComponent(CompoundComponent):
             self._do_show_highlight()
 
     def set_rgb_mode(self, color_palette, color_table, clip_slots_only=False):
-        u"""
+        """
         Put the session into rgb mode by providing a color table and a color palette.
         color_palette is a dictionary, mapping custom Live colors to MIDI ids. This can be
         used to map a color directly to a CC value.
@@ -322,12 +322,12 @@ class CustomSessionComponent(CompoundComponent):
         matching color for a custom color. The table is used if there is no entry in the
         palette.
         """
-        for y in xrange(self._num_scenes):
+        for y in range(self._num_scenes):
             scene = self.scene(y)
             if not clip_slots_only:
                 scene.set_color_palette(color_palette)
                 scene.set_color_table(color_table)
-            for x in xrange(self._num_tracks):
+            for x in range(self._num_tracks):
                 slot = scene.clip_slot(x)
                 slot.set_clip_palette(color_palette)
                 slot.set_clip_rgb_table(color_table)
@@ -347,7 +347,7 @@ class CustomSessionComponent(CompoundComponent):
 
     def _update_stop_track_clip_buttons(self):
         if self.is_enabled():
-            for index in xrange(self._num_tracks):
+            for index in range(self._num_tracks):
                 self._update_stop_clips_led(index)
 
     def on_scene_list_changed(self):
@@ -586,7 +586,7 @@ class CustomSessionComponent(CompoundComponent):
 
     @staticmethod
     def _perform_offset_change(track_increment, scene_increment):
-        u""" Performs the given offset changes on all linked instances """
+        """ Performs the given offset changes on all linked instances """
         assert len(CustomSessionComponent._linked_session_instances) > 0
         scenes = Live.Application.get_application().get_document().scenes
         instances_covering_session = 0
@@ -625,9 +625,9 @@ class CustomSessionComponent(CompoundComponent):
         self._delete_button_slot = self.make_button_slot('delete')
         self._delete_button_slot.subject = button
 
-        for scene_index in xrange(self._num_scenes):
+        for scene_index in range(self._num_scenes):
             scene = self.scene(scene_index)
-            for track_index in xrange(self._num_tracks):
+            for track_index in range(self._num_tracks):
                 clip_slot = scene.clip_slot(track_index)
                 clip_slot.set_delete_button(self._delete_button)
 
@@ -642,9 +642,9 @@ class CustomSessionComponent(CompoundComponent):
         self._copy_button_slot.subject = button
 
         self.clip_slot_copy_handler = CustomClipSlotCopyHandler()
-        for scene_index in xrange(self._num_scenes):
+        for scene_index in range(self._num_scenes):
             scene = self.scene(scene_index)
-            for track_index in xrange(self._num_tracks):
+            for track_index in range(self._num_tracks):
                 clip_slot = scene.clip_slot(track_index)
                 clip_slot.set_copy_button(self._copy_button, self.clip_slot_copy_handler)
 

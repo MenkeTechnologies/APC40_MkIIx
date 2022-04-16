@@ -1,5 +1,5 @@
 import sys
-from itertools import chain, imap, ifilter
+from itertools import chain
 from _Framework.SubjectSlot import subject_slot, subject_slot_group
 from .NoteEditorComponent import NoteEditorComponent, most_significant_note
 from .APCMessenger import APCMessenger
@@ -67,7 +67,7 @@ class APCNoteEditorComponent(NoteEditorComponent, APCMessenger):
     """
     step_colors = ['NoteEditor.StepDisabled'] * self._get_step_count()
     width = self._width
-    coords_to_index = lambda (x, y): x + y * width
+    coords_to_index = lambda x_y: x_y[0] + x_y[1] * width
     editing_indices = set(map(coords_to_index, self._modified_steps))
     selected_indices = set(map(coords_to_index, self._pressed_steps))
     last_editing_notes = []
@@ -84,7 +84,7 @@ class APCNoteEditorComponent(NoteEditorComponent, APCMessenger):
         else:
           note_color = color_for_note(most_significant_note(notes))
           color = 'NoteEditor.Step.' + note_color
-      elif any(imap(time_step.overlaps_note, last_editing_notes)):
+      elif any(map(time_step.overlaps_note, last_editing_notes)):
         color = 'NoteEditor.StepEditing.' + note_color
       elif index in editing_indices or index in selected_indices:
         color = 'NoteEditor.StepSelected'
@@ -102,9 +102,9 @@ class APCNoteEditorComponent(NoteEditorComponent, APCMessenger):
     first_time = self.page_length * self._page_index
     steps_per_page = self._get_step_count()
     step_length = self._get_step_length()
-    indices = range(steps_per_page)
+    indices = list(range(steps_per_page))
     if self._is_triplet_quantization():
-      indices = filter(lambda k: k % 4 != 3, indices)
+      indices = [k for k in indices if k % 4 != 3]
     return [ (self._time_step(first_time + k * step_length), index) for k, index in enumerate(indices) ]
 
   def on_selected_track_changed(self):

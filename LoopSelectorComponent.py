@@ -1,5 +1,5 @@
 #Embedded file name: /Users/versonator/Jenkins/live/output/mac_64_static/Release/midi-remote-scripts/Push/LoopSelectorComponent.py
-from __future__ import with_statement
+
 from functools import partial
 from _Framework import Task
 from _Framework import Defaults
@@ -9,7 +9,7 @@ from _Framework.ControlSurfaceComponent import ControlSurfaceComponent
 from _Framework.Util import contextmanager, clamp
 from _Framework.ComboElement import DoublePressElement
 
-from itertools import izip
+
 
 def create_clip_in_selected_slot(creator, song, clip_length = None):
     """
@@ -301,10 +301,10 @@ class LoopSelectorComponent(ControlSurfaceComponent):
                 else:
                     return 'LoopSelector.OutsideLoop'
 
-            return map(color_for_page, xrange(page_offset, page_offset + size))
+            return list(map(color_for_page, range(page_offset, page_offset + size)))
 
         def mark_selected_pages(page_colors):
-            for page_index in xrange(*self._selected_pages_range()):
+            for page_index in range(*self._selected_pages_range()):
                 button_index = page_index - self.page_offset
                 if page_colors[button_index].startswith('LoopSelector.InsideLoop'):
                     page_colors[button_index] = 'LoopSelector.SelectedPage'
@@ -321,7 +321,7 @@ class LoopSelectorComponent(ControlSurfaceComponent):
     def _update_page_leds_in_matrix(self, matrix):
         """ update hardware leds to match precomputed map """
         if self.is_enabled() and matrix:
-            for button, color in izip(matrix, self._page_colors):
+            for button, color in zip(matrix, self._page_colors):
                 if button and (color == 'LoopSelector.Playhead' or color == 'LoopSelector.OutsideLoop' or isinstance(button, DoublePressElement)):
                     if color == 'LoopSelector.Playhead' or (not hasattr(button, '_skin_name') or button._skin_name == 'NoteEditor.StepEmpty'):
                         button.set_light(color)

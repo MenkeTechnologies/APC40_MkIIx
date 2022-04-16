@@ -1,13 +1,14 @@
 #Embedded file name: /Users/versonator/Jenkins/live/output/mac_64_static/Release/midi-remote-scripts/Push/TouchStripElement.py
 import Live
-import Sysex
+from . import Sysex
 from _Framework.Util import group, in_range, nop, NamedTuple, clamp
 from _Framework.SubjectSlot import SlotManager
 from _Framework.InputControlElement import InputControlElement, MIDI_PB_TYPE
+from functools import reduce
 MAX_PITCHBEND = 16384.0
 
 class TouchStripModes:
-    CUSTOM_PITCHBEND, CUSTOM_VOLUME, CUSTOM_PAN, CUSTOM_DISCRETE, CUSTOM_FREE, PITCHBEND, VOLUME, PAN, DISCRETE, MODWHEEL, COUNT = range(11)
+    CUSTOM_PITCHBEND, CUSTOM_VOLUME, CUSTOM_PAN, CUSTOM_DISCRETE, CUSTOM_FREE, PITCHBEND, VOLUME, PAN, DISCRETE, MODWHEEL, COUNT = list(range(11))
 
 
 class TouchStripBehaviour(object):

@@ -48,7 +48,7 @@ class NoteEditorPaginator(Paginator, SlotManager):
     def select_page_in_point(self, value):
         can_change_page = self.can_change_page
         if can_change_page:
-            map(lambda e: e.set_selected_page_point(value), self._note_editors)
+            list(map(lambda e: e.set_selected_page_point(value), self._note_editors))
             if self._update_from_page_index():
                 self.notify_page()
         return can_change_page

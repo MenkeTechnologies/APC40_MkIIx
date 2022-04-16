@@ -3,9 +3,9 @@
 Module for the color interfaces defining all posible ways of turning
 on buttons on Push.
 """
-from __future__ import absolute_import, print_function, unicode_literals
 
-from itertools import izip, repeat
+
+from itertools import repeat
 from _Framework.ButtonElement import Color
 
 
@@ -31,19 +31,19 @@ class RgbColor(Color):
         if not (shade_level > 0 and shade_level <= 2):
             raise AssertionError
         shade_factor = 1.0 / 2.0 * (2 - shade_level)
-        return RgbColor(self.midi_value + shade_level, [ a * b for a, b in izip(self._rgb_value, repeat(shade_factor)) ])
+        return RgbColor(self.midi_value + shade_level, [ a * b for a, b in zip(self._rgb_value, repeat(shade_factor)) ])
 
     def highlight(self):
         """
         Generate a new highlighted RGB from this color.
         """
-        return RgbColor(self.midi_value - 1, [ a * b for a, b in izip(self._rgb_value, repeat(1.5)) ])
+        return RgbColor(self.midi_value - 1, [ a * b for a, b in zip(self._rgb_value, repeat(1.5)) ])
 
     def draw(self, interface):
         if interface.is_rgb:
             super(RgbColor, self).draw(interface)
         else:
-            raise NotDrawableError, 'Rgb color ' + str(self._rgb_value) + ' not drawable in ' + interface.name
+            raise NotDrawableError('Rgb color ' + str(self._rgb_value) + ' not drawable in ' + interface.name)
 
     def __iter__(self):
         return iter(self._rgb_value)
@@ -93,7 +93,7 @@ class AnimatedColor(Color):
         interface.send_value(self.color2.midi_value, channel=self.channel2)
 
     def convert_to_midi_value(self):
-        raise NotImplementedError, 'Animations cannot be serialized'
+        raise NotImplementedError('Animations cannot be serialized')
 
 
 class Pulse(AnimatedColor):

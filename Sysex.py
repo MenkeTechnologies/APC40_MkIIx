@@ -34,7 +34,7 @@ def to_bytes(number, size):
     """
     if not (in_range(number, 0, 1 << size * 4)):
         raise AssertionError
-    return tuple([ number >> offset & 15 for offset in xrange((size - 1) * 4, -1, -4) ])
+    return tuple([ number >> offset & 15 for offset in range((size - 1) * 4, -1, -4) ])
 
 
 def to_sysex_int(number, unused_parameter_name):

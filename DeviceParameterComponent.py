@@ -1,5 +1,5 @@
 #Embedded file name: /Users/versonator/Jenkins/live/output/mac_64_static/Release/midi-remote-scripts/Push/DeviceParameterComponent.py
-from itertools import chain, repeat, ifilter
+from itertools import chain, repeat
 import Live
 AutomationState = Live.DeviceParameter.AutomationState
 from _Framework.Util import first, second
@@ -73,18 +73,18 @@ class DeviceParameterComponent(ControlSurfaceComponent):
     def __init__(self, parameter_provider = None, *a, **k):
         super(DeviceParameterComponent, self).__init__(*a, **k)
         self._parameter_controls = []
-        self._parameter_name_data_sources = map(DisplayDataSource, ('', '', '', '', '', '', '', ''))
-        self._parameter_value_data_sources = map(DisplayDataSource, ('', '', '', '', '', '', '', ''))
-        self._parameter_graphic_data_sources = map(DisplayDataSource, ('', '', '', '', '', '', '', ''))
+        self._parameter_name_data_sources = list(map(DisplayDataSource, ('', '', '', '', '', '', '', '')))
+        self._parameter_value_data_sources = list(map(DisplayDataSource, ('', '', '', '', '', '', '', '')))
+        self._parameter_graphic_data_sources = list(map(DisplayDataSource, ('', '', '', '', '', '', '', '')))
         self.parameter_provider = parameter_provider
 
     @property
     def parameters(self):
-        return map(second, self._parameter_provider.parameters)
+        return list(map(second, self._parameter_provider.parameters))
 
     @property
     def parameter_names(self):
-        return map(first, self._parameter_provider.parameters)
+        return list(map(first, self._parameter_provider.parameters))
 
     def _get_parameter_provider(self):
         return self._parameter_provider
@@ -113,7 +113,7 @@ class DeviceParameterComponent(ControlSurfaceComponent):
     def _set_display_line(self, line, sources):
         if line:
             line.set_num_segments(len(sources))
-            for segment in xrange(len(sources)):
+            for segment in range(len(sources)):
                 line.segment(segment).set_data_source(sources[segment])
 
     def clear_display(self):
@@ -121,7 +121,7 @@ class DeviceParameterComponent(ControlSurfaceComponent):
             source.set_display_string('')
 
     def _release_parameters(self):
-        for encoder in ifilter(None, self._parameter_controls or []):
+        for encoder in filter(None, self._parameter_controls or []):
             encoder.release_parameter()
 
     def _connect_parameters(self):
@@ -154,7 +154,7 @@ class DeviceParameterComponent(ControlSurfaceComponent):
 
     def _update_parameter_names(self):
         if self.is_enabled():
-            params = zip(chain(self.parameter_provider.parameters, repeat(('', None))), self._parameter_name_data_sources)
+            params = list(zip(chain(self.parameter_provider.parameters, repeat(('', None))), self._parameter_name_data_sources))
             for (name, parameter), name_data_source in params:
                 if parameter and parameter.automation_state != AutomationState.none:
                     name = consts.CHAR_FULL_BLOCK + name
@@ -175,7 +175,7 @@ class DeviceParameterComponent(ControlSurfaceComponent):
                     data_source.set_display_string(graph)
 
     def parameter_to_string(self, parameter):
-        return '' if parameter == None else unicode(parameter)
+        return '' if parameter == None else str(parameter)
 
     def parameter_to_value(self, parameter):
         return parameter.value

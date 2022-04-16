@@ -1,5 +1,5 @@
 #Embedded file name: /Users/versonator/Jenkins/live/output/mac_64_static/Release/midi-remote-scripts/Push/PlayheadComponent.py
-from __future__ import with_statement
+
 from _Framework.ControlSurfaceComponent import ControlSurfaceComponent
 from _Framework.SubjectSlot import subject_slot
 
@@ -8,7 +8,7 @@ class PlayheadComponent(ControlSurfaceComponent):
     Updates the contents of the Live playhead object.
     """
 
-    def __init__(self, paginator = None, grid_resolution = None, follower = None, notes = range(8), triplet_notes = range(6), feedback_channels = [], *a, **k):
+    def __init__(self, paginator = None, grid_resolution = None, follower = None, notes = list(range(8)), triplet_notes = list(range(6)), feedback_channels = [], *a, **k):
         super(PlayheadComponent, self).__init__(*a, **k)
         self._playhead = None
         self._clip = None

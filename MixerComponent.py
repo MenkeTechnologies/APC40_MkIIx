@@ -1,7 +1,7 @@
 # Embedded file name: /Users/versonator/Jenkins/live/output/mac_64_static/Release/python-bundle/MIDI Remote Scripts/APC40_MkII/MixerComponent.py
 # Compiled at: 2018-04-23 20:27:04
-from __future__ import absolute_import, print_function, unicode_literals
-from itertools import ifilter, izip_longest
+
+from itertools import zip_longest
 from _Framework.Control import RadioButtonControl, control_list
 from _Framework.Dependency import depends
 from _Framework.Util import nop
@@ -26,7 +26,7 @@ class ChannelStripComponent(ChannelStripComponentBase):
 
 
 def _set_channel(controls, channel):
-    for control in ifilter(None, controls or []):
+    for control in filter(None, controls or []):
         control.set_channel(channel)
 
     return
@@ -92,7 +92,7 @@ class MixerComponent(MixerComponentBase):
             self._show_message('Controlling User Mappings')
 
     def set_crossfade_buttons(self, buttons):
-        for strip, button in izip_longest(self._channel_strips, buttons or []):
+        for strip, button in zip_longest(self._channel_strips, buttons or []):
             strip.set_crossfade_toggle(button)
 
     def _update_pan_controls(self):

@@ -1,5 +1,5 @@
 #Embedded file name: /Users/versonator/Jenkins/live/output/mac_64_static/Release/midi-remote-scripts/Push/InstrumentComponent.py
-from itertools import ifilter
+
 from functools import partial
 from _Framework.Control import ButtonControl, ToggleButtonControl
 from _Framework.CompoundComponent import CompoundComponent
@@ -14,12 +14,12 @@ from _PushLegacy.MelodicPattern import MelodicPattern, Modus, pitch_index_to_str
 from _PushLegacy.MatrixMaps import NON_FEEDBACK_CHANNEL
 from _PushLegacy.SlideableTouchStripComponent import SlideableTouchStripComponent
 from _PushLegacy.TouchStripElement import TouchStripElement, TouchStripModes, MODWHEEL_BEHAVIOUR, DEFAULT_BEHAVIOUR
-import Sysex
-import consts
+from . import Sysex
+from . import consts
 
 from _PushLegacy.InstrumentComponent import InstrumentComponent
 
-from APCMessenger import APCMessenger
+from .APCMessenger import APCMessenger
 
 class InstrumentPresetsComponent(DisplayingModesComponent):
     is_horizontal = True
@@ -38,7 +38,7 @@ class InstrumentPresetsComponent(DisplayingModesComponent):
 
     def _update_data_sources(self, selected):
         if self.is_enabled():
-            for name, (source, string) in self._mode_data_sources.iteritems():
+            for name, (source, string) in self._mode_data_sources.items():
                 source.set_display_string(consts.CHAR_SELECT + string if name == selected else string)
 
     def _set_scale_mode(self, is_horizontal, interval):
@@ -102,14 +102,14 @@ class InstrumentScalesComponent(CompoundComponent):
         self._absolute_relative_button = None
         self._diatonic_chromatic_button = None
         table = consts.MUSICAL_MODES
-        self._info_sources = map(DisplayDataSource, ('Scale selection:', '', ''))
+        self._info_sources = list(map(DisplayDataSource, ('Scale selection:', '', '')))
         self._line_sources = recursive_map(DisplayDataSource, (('', '', '', '', '', '', ''), ('', '', '', '', '', '', '')))
-        self._modus_sources = map(partial(DisplayDataSource, adjust_string_fn=adjust_string_crop), ('', '', '', ''))
+        self._modus_sources = list(map(partial(DisplayDataSource, adjust_string_fn=adjust_string_crop), ('', '', '', '')))
         self._presets = self.register_component(InstrumentPresetsComponent(is_enabled=False))
         self._presets.selected_mode = 'scale_p4_vertical'
         self._modus_list = self.register_component(ListComponent(data_sources=self._modus_sources))
         self._modus_list.scrollable_list.fixed_offset = 1
-        self._modus_list.scrollable_list.assign_items([ Modus(name=table[i], notes=table[i + 1]) for i in xrange(0, len(consts.MUSICAL_MODES), 2) ])
+        self._modus_list.scrollable_list.assign_items([ Modus(name=table[i], notes=table[i + 1]) for i in range(0, len(consts.MUSICAL_MODES), 2) ])
         self._on_selected_modus.subject = self._modus_list.scrollable_list
         self._update_data_sources()
 
@@ -476,7 +476,7 @@ class InstrumentComponent(InstrumentComponent, Slideable, APCMessenger):
     def _update_touch_strip_indication(self):
         if self._touch_strip_indication:
             self._touch_strip_indication.set_mode(TouchStripModes.CUSTOM_FREE)
-            self._touch_strip_indication.send_state([ (TouchStripElement.STATE_FULL if self.touch_strip_toggle.is_toggled else TouchStripElement.STATE_HALF) for _ in xrange(24) ])
+            self._touch_strip_indication.send_state([ (TouchStripElement.STATE_FULL if self.touch_strip_toggle.is_toggled else TouchStripElement.STATE_HALF) for _ in range(24) ])
 
     def set_note_strip(self, strip):
         self._touch_slider.set_scroll_strip(strip)
@@ -553,7 +553,7 @@ class InstrumentComponent(InstrumentComponent, Slideable, APCMessenger):
             self._matrix.reset()
             pattern = self._pattern
             max_j = self._matrix.width() - 1
-            for button, (i, j) in ifilter(first, self._matrix.iterbuttons()):
+            for button, (i, j) in filter(first, self._matrix.iterbuttons()):
                 profile = 'default' if self._takeover_pads else 'instrument'
                 button.sensitivity_profile = profile
                 note_info = pattern.note(i, max_j - j)

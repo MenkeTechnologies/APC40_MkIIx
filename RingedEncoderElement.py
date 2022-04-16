@@ -1,6 +1,6 @@
 # Embedded file name: /Users/versonator/Jenkins/live/output/mac_64_static/Release/python-bundle/MIDI Remote Scripts/_APC/RingedEncoderElement.py
 # Compiled at: 2018-04-23 20:27:04
-from __future__ import absolute_import, print_function, unicode_literals
+
 from _Framework.EncoderElement import TouchEncoderElement as EncoderElement
 from _Framework.ButtonElement import ButtonElement
 
@@ -12,7 +12,7 @@ RING_VOL_VALUE = 2
 RING_PAN_VALUE = 3
 
 class RingedEncoderElement(EncoderElement, APCMessenger):
-    u"""
+    """
     Class representing a continuous control on the controller enclosed with an LED ring
     """
 

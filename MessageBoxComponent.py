@@ -34,7 +34,7 @@ class MessageBoxComponent(BackgroundComponent):
         self._current_text = None
         self._can_cancel = False
         self._top_row_buttons = None
-        self.data_sources = map(DisplayDataSource, ('',) * self.num_lines)
+        self.data_sources = list(map(DisplayDataSource, ('',) * self.num_lines))
         self._notification_display = None
 
     def _set_display_line(self, n, display_line):

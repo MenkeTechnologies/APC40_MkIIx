@@ -1,6 +1,6 @@
 import Live
 
-from itertools import imap, chain, starmap, izip, ifilter
+from itertools import chain, starmap
 from _Framework.Util import first
 from _Framework.ClipCreator import ClipCreator
 from _Framework.SubjectSlot import subject_slot, subject_slot_group
@@ -95,7 +95,7 @@ class StepSeqComponent(StepSeqComponent, APCMessenger):
         This component is enabled """
         self._note_editor_matrix = matrix
         if matrix:
-            for button, _ in ifilter(first, matrix.iterbuttons()):
+            for button, _ in filter(first, matrix.iterbuttons()):
                 button.set_channel(NON_FEEDBACK_CHANNEL)
         self._update_note_editor_matrix()
         self._note_editor.set_enabled(True)
@@ -105,7 +105,7 @@ class StepSeqComponent(StepSeqComponent, APCMessenger):
     def set_loop_selector_matrix(self, matrix):
         self._loop_selector.set_loop_selector_matrix(matrix)
         if matrix:
-            for button, _ in ifilter(first, matrix.iterbuttons()):
+            for button, _ in filter(first, matrix.iterbuttons()):
                 button.set_channel(NON_FEEDBACK_CHANNEL)
 
     def selected_track(self):

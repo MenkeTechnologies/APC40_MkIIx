@@ -1,6 +1,6 @@
 #Embedded file name: /Users/versonator/Jenkins/live/output/mac_64_static/Release/midi-remote-scripts/Push/SkinDefault.py
 from _Framework.Skin import Skin
-from Colors import Basic, Rgb, Pulse, Blink, BiLed
+from .Colors import Basic, Rgb, Pulse, Blink, BiLed
 
 class Colors:
 

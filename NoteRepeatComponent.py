@@ -33,7 +33,7 @@ class NoteRepeatComponent(CompoundComponent):
         self._options = self.register_component(OptionsComponent())
         self._options.selected_color = 'NoteRepeat.RateSelected'
         self._options.unselected_color = 'NoteRepeat.RateUnselected'
-        self._options.option_names = map(str, range(8))
+        self._options.option_names = list(map(str, list(range(8))))
         self._options.selected_option = 5
         self._on_selected_option_changed.subject = self._options
         self.set_note_repeat(None)

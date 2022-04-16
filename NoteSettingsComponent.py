@@ -1,7 +1,7 @@
 #Embedded file name: /Users/versonator/Jenkins/live/output/mac_64_static/Release/midi-remote-scripts/Push/NoteSettingsComponent.py
 import math
 from functools import partial
-from itertools import imap
+
 from _Framework.SubjectSlot import subject_slot, subject_slot_group, Subject, SlotManager
 from _Framework.ControlSurfaceComponent import ControlSurfaceComponent
 from _Framework.DisplayDataSource import DisplayDataSource
@@ -142,8 +142,8 @@ class NoteSettingsComponent(ControlSurfaceComponent):
 
     def __init__(self, grid_resolution = None, *a, **k):
         super(NoteSettingsComponent, self).__init__(*a, **k)
-        self._top_data_sources = [ DisplayDataSource() for _ in xrange(8) ]
-        self._bottom_data_sources = [ DisplayDataSource() for _ in xrange(8) ]
+        self._top_data_sources = [ DisplayDataSource() for _ in range(8) ]
+        self._bottom_data_sources = [ DisplayDataSource() for _ in range(8) ]
         self._info_data_source = DisplayDataSource()
         self._settings = []
         self._encoders = []
@@ -154,11 +154,11 @@ class NoteSettingsComponent(ControlSurfaceComponent):
 
     def _add_setting(self, setting):
         if not (len(self._settings) < 8):
-            raise AssertionError, 'Cannot show more than 8 settings'
+            raise AssertionError('Cannot show more than 8 settings')
         self._settings.append(setting)
         self._update_encoders()
-        self._top_data_sources = [ DisplayDataSource() for _ in xrange(8 - len(self._settings)) ] + [ s.label_source for s in self._settings ]
-        self._bottom_data_sources = [ DisplayDataSource() for _ in xrange(8 - len(self._settings)) ] + [ s.value_source for s in self._settings ]
+        self._top_data_sources = [ DisplayDataSource() for _ in range(8 - len(self._settings)) ] + [ s.label_source for s in self._settings ]
+        self._bottom_data_sources = [ DisplayDataSource() for _ in range(8 - len(self._settings)) ] + [ s.value_source for s in self._settings ]
         self.register_disconnectable(setting)
         self.register_slot(setting, self.notify_setting_changed, 'setting_changed')
 
@@ -204,7 +204,7 @@ class NoteSettingsComponent(ControlSurfaceComponent):
                 setting.set_encoder(encoder)
 
         else:
-            map(lambda setting: setting.set_encoder(None), self._settings)
+            list(map(lambda setting: setting.set_encoder(None), self._settings))
 
     def update(self):
         super(NoteSettingsComponent, self).update()
@@ -243,7 +243,7 @@ class NoteEditorSettingsComponent(ModesComponent):
         super(NoteEditorSettingsComponent, self).__init__(*a, **k)
         if not (encoder_layer):
             raise AssertionError
-        self._bottom_data_sources = [ DisplayDataSource() for _ in xrange(8) ]
+        self._bottom_data_sources = [ DisplayDataSource() for _ in range(8) ]
         self._request_hide = False
         self.settings = self.register_component(NoteSettingsComponent(grid_resolution=grid_resolution, layer=settings_layer))
         self.settings.set_enabled(False)
@@ -344,13 +344,13 @@ class NoteEditorSettingsComponent(ModesComponent):
                 clip.view.hide_envelope()
 
     def _try_immediate_show_settings(self):
-        if self.selected_mode == 'about_to_show' and any(imap(lambda e: e and e.is_pressed(), self._initial_encoders or [])):
+        if self.selected_mode == 'about_to_show' and any(map(lambda e: e and e.is_pressed(), self._initial_encoders or [])):
             self._show_settings()
 
     @subject_slot_group('active_steps')
     def _on_active_steps_changed(self, editor):
         if self.is_enabled():
-            all_steps = list(set(chain_from_iterable(imap(lambda e: e.active_steps, self._editors))))
+            all_steps = list(set(chain_from_iterable(map(lambda e: e.active_steps, self._editors))))
             self._automation.selected_time = all_steps
             self._update_note_infos()
             if len(all_steps) > 0:
@@ -403,16 +403,18 @@ class NoteEditorSettingsComponent(ModesComponent):
     def _update_note_infos(self):
         if self.settings.is_enabled():
 
-            def min_max((l_min, l_max), (r_min, r_max)):
+            def min_max(xxx_todo_changeme, xxx_todo_changeme1):
+                (l_min, l_max) = xxx_todo_changeme
+                (r_min, r_max) = xxx_todo_changeme1
                 return (min(l_min, r_min), max(l_max, r_max))
 
-            all_min_max_attributes = filter(None, imap(lambda e: e.get_min_max_note_values(), self._editors))
+            all_min_max_attributes = [_f for _f in map(lambda e: e.get_min_max_note_values(), self._editors) if _f]
             min_max_values = [(99999, -99999)] * 4 if len(all_min_max_attributes) > 0 else None
             for min_max_attribute in all_min_max_attributes:
                 for i, attribute in enumerate(min_max_attribute):
                     min_max_values[i] = min_max(min_max_values[i], attribute)
 
-            for i in xrange(4):
+            for i in range(4):
                 self.settings.set_min_max(i, min_max_values[i] if min_max_values else None)
 
             edit_all_notes_active = find_if(lambda e: e.modify_all_notes_enabled, self._editors) != None
@@ -431,7 +433,7 @@ class NoteEditorSettingsComponent(ModesComponent):
             self.selected_setting = 'automation'
 
     def _try_hide_settings(self):
-        if self._request_hide and not any(imap(lambda e: e and e.is_pressed(), self._encoders or [])):
+        if self._request_hide and not any(map(lambda e: e and e.is_pressed(), self._encoders or [])):
             self.selected_mode = 'disabled'
             self._request_hide = False
 
